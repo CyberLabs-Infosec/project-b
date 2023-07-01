@@ -6,7 +6,7 @@
 using namespace std;
 
 
-unsigned int contd_fraction_convergents(mpz_t x, mpz_t y, mpz_t* n, mpz_t* d)          // x is n, y is e
+unsigned int contd_fraction_convergents(mpz_t x, mpz_t y, vector<mpz_t>* n, vector<mpz_t>* d)          // x is n, y is e
 {
 	mpz_t rem, q;
 	mpz_inits(q, rem, NULL);
@@ -14,16 +14,18 @@ unsigned int contd_fraction_convergents(mpz_t x, mpz_t y, mpz_t* n, mpz_t* d)   
 	mpz_inits(z, NULL);
 	mpz_set_ui(z, 0);
 	
-	//vector<mpz_t> coeff;
-	mpz_t* coeff;
+	vector<mpz_t> coeff;
+	//mpz_t* coeff;
 	unsigned int size = 0;
 	while (mpz_cmp(rem, z) != 0)
 	{
 		mpz_cdiv_qr(q, rem, x, y);
-		//coeff.push_back(q);
-		mpz_init(*(coeff + size));
-		mpz_set(*(coeff + size), q);
+		coeff.resize(size + 1);
 		size++;
+		mpz_init(coeff.at(size - 1));
+		mpz_set(coeff.at(size - 1), q);
+		//mpz_init(*(coeff + size));
+		//mpz_set(*(coeff + size), q);
 		mpz_set(x, y);
 		mpz_set(y, rem);	
 	}
@@ -46,14 +48,19 @@ unsigned int contd_fraction_convergents(mpz_t x, mpz_t y, mpz_t* n, mpz_t* d)   
 		}
 		//n->push_back(t);
 		//d->push_back(s);
-		mpz_inits(n[i - 1], d[i - 1]);
-		mpz_set(n[i - 1], t);
-		mpz_set(d[i - 1], s);
+		n->resize(n->size() + 1);
+		d->resize(d->size() + 1);
+		mpz_inits(n->at(n->size() - 1), d->at(d->size() - 1), NULL);
+		mpz_set(n->at(n->size() - 1), t);
+		mpz_set(d->at(d->size() - 1), s);
+		//mpz_inits(n[i - 1], d[i - 1]);
+		//mpz_set(n[i - 1], t);
+		//mpz_set(d[i - 1], s);
 	}
 
-	for (int i = 0; i < size; i++)
+	for (unsigned int i = 0; i < size; i++)
 	{
-		cout << "\t" << n[i] << "/" << d[i] << endl;
+		cout << "\t" << n->at(i) << "/" << d->at(i) << endl;
 	}
 
 
@@ -64,13 +71,15 @@ unsigned int contd_fraction_convergents(mpz_t x, mpz_t y, mpz_t* n, mpz_t* d)   
 
 void weiner_attack(mpz_t n, mpz_t e, mpz_t c)
 {
-	/*vector<mpz_t> numerator;
+	vector<mpz_t> numerator;
 	vector<mpz_t> denominator;
-	contd_fraction_convergents(n, e, &numerator, &denominator);*/
+	unsigned int size = contd_fraction_convergents(n, e, &numerator, &denominator);
 
-	mpz_t *numerator, *denominator; 
+
+
+	//mpz_t *numerator, *denominator; 
 	//  missing line
-	unsigned int size = contd_fraction_convergents(n, e, numerator, denominator);
+	//unsigned int size = contd_fraction_convergents(n, e, numerator, denominator);
 
 	unsigned int i, count = 0;
 
@@ -79,10 +88,10 @@ void weiner_attack(mpz_t n, mpz_t e, mpz_t c)
 
 	for (i = 1; i <= size; i++)
 	{
-		//mpz_set(d, numerator.at(i));
-		//mpz_set(k, denominator.at(i));
-		mpz_set(d, numerator[i - 1]);
-		mpz_set(k, denominator[i - 1]);
+		mpz_set(d, numerator.at(i));
+		mpz_set(k, denominator.at(i));
+		//mpz_set(d, numerator[i - 1]);
+		//mpz_set(k, denominator[i - 1]);
 		
 		mpz_t even_check, ed;
 		mpz_t val0, val1;             //variables for comparison

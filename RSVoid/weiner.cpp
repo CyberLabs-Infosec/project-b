@@ -44,13 +44,10 @@ unsigned int contd_fraction_convergents(mpz_t x, mpz_t y, vector<Integer>* n, ve
 		{
 			mpz_t temp_t;
 			mpz_set(temp_t, t);
-			//mpz_mul(t, coeff[j], t);
 			mpz_mul(t, coeff.at(j).var, t);
 			mpz_add(t, s, t);
 			mpz_set(s, temp_t);
 		}
-		//n->push_back(t);
-		//d->push_back(s);
 		
 		n->resize(n->size() + 1);
 		d->resize(d->size() + 1);
@@ -81,7 +78,7 @@ void weiner_attack(mpz_t n, mpz_t e, mpz_t c)
 
 	unsigned int size = contd_fraction_convergents(n, e, &numerator, &denominator);
 
-	unsigned int i, count = 0;                //variable i already declared
+	unsigned int i, count = 0;                
 
 	mpz_t d, k;
 	mpz_inits(d, k, NULL);

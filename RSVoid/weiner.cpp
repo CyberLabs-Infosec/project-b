@@ -2,11 +2,12 @@
 #include"gmpxx.h"
 #include"Functions.h"
 #include<vector>
+#include"classes.h"
 
 using namespace std;
 
 
-unsigned int contd_fraction_convergents(mpz_t x, mpz_t y, vector<mpz_t>* n, vector<mpz_t>* d)          // x is n, y is e
+unsigned int contd_fraction_convergents(mpz_t x, mpz_t y, vector<Integer>* n, vector<Integer>* d)          // x is n, y is e
 {
 	mpz_t rem, q;
 	mpz_inits(q, rem, NULL);
@@ -14,7 +15,7 @@ unsigned int contd_fraction_convergents(mpz_t x, mpz_t y, vector<mpz_t>* n, vect
 	mpz_inits(z, NULL);
 	mpz_set_ui(z, 0);
 	
-	vector<mpz_t> coeff;
+	vector<Integer> coeff;
 	//mpz_t* coeff;
 	unsigned int size = 0;
 	while (mpz_cmp(rem, z) != 0)
@@ -22,8 +23,8 @@ unsigned int contd_fraction_convergents(mpz_t x, mpz_t y, vector<mpz_t>* n, vect
 		mpz_cdiv_qr(q, rem, x, y);
 		coeff.resize(size + 1);
 		size++;
-		mpz_init(coeff.at(size - 1));
-		mpz_set(coeff.at(size - 1), q);
+		mpz_init(coeff.at(size - 1).var);
+		mpz_set(coeff.at(size - 1).var, q);
 		//mpz_init(*(coeff + size));
 		//mpz_set(*(coeff + size), q);
 		mpz_set(x, y);
@@ -36,23 +37,26 @@ unsigned int contd_fraction_convergents(mpz_t x, mpz_t y, vector<mpz_t>* n, vect
 	{
 		mpz_t s, t;
 		mpz_inits(s, t, NULL);
-		mpz_set(t, coeff[i-1]);
+		//mpz_set(t, coeff[i-1]);
+		mpz_set(t, coeff.at(i - 1).var);
 		mpz_set_ui(s, 1);
 		for (j = i-1; j >= 1; j--)
 		{
 			mpz_t temp_t;
 			mpz_set(temp_t, t);
-			mpz_mul(t, coeff[j], t);
+			//mpz_mul(t, coeff[j], t);
+			mpz_mul(t, coeff.at(j).var, t);
 			mpz_add(t, s, t);
 			mpz_set(s, temp_t);
 		}
 		//n->push_back(t);
 		//d->push_back(s);
+		
 		n->resize(n->size() + 1);
 		d->resize(d->size() + 1);
-		mpz_inits(n->at(n->size() - 1), d->at(d->size() - 1), NULL);
-		mpz_set(n->at(n->size() - 1), t);
-		mpz_set(d->at(d->size() - 1), s);
+		mpz_inits(n->at(n->size() - 1).var, d->at(d->size() - 1).var, NULL);
+		mpz_set(n->at(n->size() - 1).var, t);
+		mpz_set(d->at(d->size() - 1).var, s);
 		//mpz_inits(n[i - 1], d[i - 1]);
 		//mpz_set(n[i - 1], t);
 		//mpz_set(d[i - 1], s);
@@ -60,7 +64,7 @@ unsigned int contd_fraction_convergents(mpz_t x, mpz_t y, vector<mpz_t>* n, vect
 
 	for (unsigned int i = 0; i < size; i++)
 	{
-		cout << "\t" << n->at(i) << "/" << d->at(i) << endl;
+		cout << "\t" << n->at(i).var << "/" << d->at(i).var << endl;
 	}
 
 
@@ -71,25 +75,21 @@ unsigned int contd_fraction_convergents(mpz_t x, mpz_t y, vector<mpz_t>* n, vect
 
 void weiner_attack(mpz_t n, mpz_t e, mpz_t c)
 {
-	vector<mpz_t> numerator;
-	vector<mpz_t> denominator;
+
+	vector<Integer> numerator;
+	vector<Integer> denominator;
+
 	unsigned int size = contd_fraction_convergents(n, e, &numerator, &denominator);
 
-
-
-	//mpz_t *numerator, *denominator; 
-	//  missing line
-	//unsigned int size = contd_fraction_convergents(n, e, numerator, denominator);
-
-	unsigned int i, count = 0;
+	unsigned int i, count = 0;                //variable i already declared
 
 	mpz_t d, k;
 	mpz_inits(d, k, NULL);
 
 	for (i = 1; i <= size; i++)
 	{
-		mpz_set(d, numerator.at(i));
-		mpz_set(k, denominator.at(i));
+		mpz_set(d, numerator.at(i).var);
+		mpz_set(k, denominator.at(i).var);
 		//mpz_set(d, numerator[i - 1]);
 		//mpz_set(k, denominator[i - 1]);
 		

@@ -1,7 +1,7 @@
 #pragma once
 
-#include"gmpxx.h"
 #include<vector>
+#include"gmpxx.h"
 #include"classes.h"
 
 using namespace std;

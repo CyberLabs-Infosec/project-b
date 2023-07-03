@@ -139,6 +139,7 @@
   <ItemGroup>
     <ClCompile Include="common_mod.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="small_e.cpp" />
     <ClCompile Include="weiner.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

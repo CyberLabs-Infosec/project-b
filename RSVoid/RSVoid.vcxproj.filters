@@ -32,5 +32,8 @@
     <ClCompile Include="weiner.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="small_e.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

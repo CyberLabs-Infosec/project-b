@@ -25,14 +25,24 @@ int main(void)
 	mpz_t n1, e1, e2, ct1, ct2;
 	mpz_inits(n1, e1, e2, ct1, ct2, NULL);
 
-	cout << "Enter the values of n, e1, e2, ct1, ct2 respectively: \n";
-	//cin >> n1 >> e1 >> e2 >> ct1 >> ct2;
-	//common_modulus_attack(n1, e1, e2, ct1, ct2);
-	
-	mpz_t n, e, c;
-	mpz_inits(n, e, c, NULL);
-	cin >> n >> e >> c;
-	weiner_attack(n, e, c);
+	cout << "\n\nEnter the value of public exponent, e: ";
+	unsigned int pub_exp;
+	cin >> pub_exp;
+	cout << "\tDo you have " << pub_exp << " ciphertexts? (y/n) ";
+	char choice;
+	cin >> choice;
+	if (choice == 'y' || choice == 'Y')
+	{
+		small_e_multiple_ciphertexts(pub_exp);
+	}
+	else if(choice == 'n' || choice == 'N')
+	{
+		small_e_single_ciphertext(pub_exp);
+	}
+	else
+	{
+		cout << "\tWrong choice!" << endl;
+	}
 
 
 	return 0;
@@ -49,5 +59,4 @@ void intro(void)
 	cout << "\n\t3. Low decryption exponent";
 	cout << "\n\t4. Short pad attack";
 
-	cout << "\n\nEnter key-pair values to run possible attacks";
 }
